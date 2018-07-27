@@ -398,6 +398,18 @@ optional<signed_block> database_api_impl::get_block(uint32_t block_num)const
    return _db.fetch_block_by_number(block_num);
 }
 
+vector<transaction_id_type> database_api::get_block_transactions(uint32_t block_num)const
+{
+    vector<transaction_id_type> results;
+    auto block = my->get_block( block_num );
+    if (block) {
+        for (auto tx : block->transactions) {
+            results.push_back(tx.id());
+        }
+    }
+    return results;
+}
+
 processed_transaction database_api::get_transaction( uint32_t block_num, uint32_t trx_in_block )const
 {
    return my->get_transaction( block_num, trx_in_block );
